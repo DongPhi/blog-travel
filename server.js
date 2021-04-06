@@ -16,6 +16,7 @@ app.use(fileUpload({
 
 //Routes
 app.use('/user', require('./routes/userRouter'));
+app.use('/api', require('./routes/categoryRouter'));
 
 //kết nối mongodb
 const URI = process.env.MONGODB_URL
@@ -26,7 +27,7 @@ mongoose.connect(URI, {
     useUnifiedTopology: true
 }, err =>{
     if(err) throw err;
-    console.log('Kết nối tới MongoDB')
+    console.log('Kết nối tới MongoDB');
 })
 
 //kết nối tới local
