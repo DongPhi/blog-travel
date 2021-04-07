@@ -1,4 +1,4 @@
-const Category = require('../models/categorymodel');
+const Category = require('../models/categoryModel');
 
 const categoryCtrl = {
     getCategories: async(req, res) =>{
@@ -13,7 +13,7 @@ const categoryCtrl = {
         try {
             //if user have role = 1 --> admin
             //only admin can create, delete and update category
-            const {name} = res.body;
+            const {name} = req.body;
             const category = await Category.findOne({name});
             if(category) return res.status(400).json({msg:"This category alrealy exists."});
             const newCategory = new Category({name});
@@ -21,7 +21,24 @@ const categoryCtrl = {
             await newCategory.save();
             res.json({msg: "Create a category"});
 
-            res.json('Check admin success');
+        } catch (err) {
+            return res.status(500).json({msg: err.message});
+        }
+    },
+    deleteCatygory: async(req,res) =>{
+        try {
+            await Category.findByIdAndDelete(req.params.id);
+            res.json({msg: "Delete a Category"});
+        } catch (err) {
+            return res.status(500).json({msg: err.message});
+        }
+    },
+    updateCatygory: async(req,res) =>{
+        try {
+            const{name} = req.body;
+            await Category.findOneAndUpdate({_id: req.params.id}, {name});
+
+            res.json({msg: " Update a category"});
         } catch (err) {
             return res.status(500).json({msg: err.message});
         }
